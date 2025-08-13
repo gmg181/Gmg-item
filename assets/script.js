@@ -31,12 +31,7 @@ function getUrlWithoutParameters() {
 
 function Share_tg() {
   var iconName = document.getElementById("dialog-tittle-pp").textContent.replace("Icon Name: ", "");
-  var url =
-    getUrlWithoutParameters() +
-    "?q=" +
-    iconName +
-    "&mode=" +
-    itemID.state.displayMode;
+  var url = getUrlWithoutParameters() + "?q=" + iconName + "&mode=" + itemID.state.displayMode;
   var message =
     "Title: `" +
     document.getElementById("dialog-tittle").textContent +
@@ -49,33 +44,33 @@ function Share_tg() {
   window.open("https://t.me/share/url?url=" + encodeURIComponent(message) + "&text=");
 }
 
-// 🔍 Updated filter with OB search anywhere in ID
+// 🔍 Search filter function
 function filterItemsBySearch(webps, searchTerm) {
   const lowerSearch = searchTerm.trim().toLowerCase();
   const obMatch = lowerSearch.match(/^ob(\d{1,3})$/);
 
   return webps.filter(item => {
     if (obMatch) {
-      const obNumber = obMatch[1]; // "49" etc.
-      const idStr = String(item.itemID);
-      // ✅ Match agar ID ke andar kahin bhi ye number ho
-      return idStr.includes(obNumber);
+      const obNumber = obMatch[1];
+      return String(item.itemID || "").includes(obNumber);
     }
 
-    // Normal search
-    return (
-      String(item.itemID).toLowerCase().includes(lowerSearch) ||
-      item.description?.toLowerCase().includes(lowerSearch) ||
-      item.icon?.toLowerCase().includes(lowerSearch)
-    );
+    const fieldsToSearch = [
+      String(item.itemID || "").toLowerCase(),
+      (item.description || "").toLowerCase(),
+      (item.icon || "").toLowerCase(),
+      (item.name || "").toLowerCase()
+    ];
+
+    return fieldsToSearch.some(field => field.includes(lowerSearch));
   });
 }
 
 async function displayPage(pageNumber, searchTerm, webps) {
   current_data = webps;
-  let filteredItems = searchTerm.trim()
-    ? filterItemsBySearch(webps, searchTerm)
-    : webps;
+  let filteredItems = !searchTerm.trim()
+    ? webps
+    : filterItemsBySearch(webps, searchTerm);
 
   const startIdx = (pageNumber - 1) * itemID.config.perPageLimitItem;
   const endIdx = Math.min(startIdx + itemID.config.perPageLimitItem, filteredItems.length);
@@ -99,18 +94,18 @@ async function displayPage(pageNumber, searchTerm, webps) {
       const value = cdn_img_json[item.itemID?.toString()] ?? null;
       if (value) imgSrc = value;
     }
-
     image.src = imgSrc;
+
     if (item.description === "Didn't have an ID and description.") {
       image.style.background = "#607D8B";
     }
+
     image.addEventListener("click", () =>
       displayItemInfo(item, imgSrc, image, (isTrashMode = false)),
     );
 
     fragment.appendChild(image);
   }
-
   webpGallery.appendChild(fragment);
 
   let totalPages = Math.ceil(filteredItems.length / itemID.config.perPageLimitItem);
@@ -125,17 +120,18 @@ async function renderPagination(searchTerm, webps, isTrashMode, totalPages) {
   if (paginationNumbers.length === 0) {
     pagi73hd.style.visibility = "hidden";
     if (!notFoundText()) {
-      const notFoundTextElem = document.createElement("h1");
-      notFoundTextElem.id = "not_found_text";
-      notFoundTextElem.className =
+      const notFoundTextEl = document.createElement("h1");
+      notFoundTextEl.id = "not_found_text";
+      notFoundTextEl.className =
         "transition-all duration-100 ease-in-out mt-[10vh] font-black select-none ibm-plex-mono-regular text-zinc-500 rotate-90 text-[1000%] w-[100vw] text-center whitespace-nowrap";
-      notFoundTextElem.innerText = "NOT FOUND";
-      document.getElementById("container").appendChild(notFoundTextElem);
+      notFoundTextEl.innerText = "NOT FOUND";
+      document.getElementById("container").appendChild(notFoundTextEl);
     }
   } else {
     pagi73hd.style.visibility = "visible";
-    if (notFoundText()) notFoundText().remove();
-
+    if (notFoundText()) {
+      notFoundText().remove();
+    }
     const pagination = document.getElementById("pagination");
     pagination.innerHTML = "";
     paginationNumbers.forEach((pageNumber) => {
