@@ -1,199 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>FREE FIRE VAULT</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+    <title>FREE FIRE VAULT</title>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">  
+    <meta name="author" content="Starexx">  
+    <meta name="og:title" content="Starexx Items">  
+    <meta property="og:image" content="assets/og.jpg">  
+    <meta name="og:description" content="Search Free Fire game items by name or description to retrieve item ID, name & details.">  
+    <meta name="google-site-verification" content="J20YkdBYbFS0_YZdIu9Z-sKGKzYZfqOFFkQ0numjLq0">  
+    <meta name="description" content="Free Fire is a multiplayer battle royale mobile game, developed and published by Garena for Android and iOS. Battle in Style and be the last survivor!">  
+    <meta name="keywords" content="survival, last survivor, battle royale, free mobile game, garena game, craftland, ugc, starexz.m, ff craftland, ankit-mehta, starexx7, Starexx, starexx, craftland tutorial, free fire craftland, ff-item, Free Fire Info, FFInfo, FFItems, ffitems, ItemsFF, Starexx FFItems, FF-Items">  
+    <link rel="stylesheet" href="https://item-starexx.vercel.app/src/styles.css">  <style>  
+    /* 🔍 Main screen search bar styling */  
+    .main-search {  
+        display: flex;  
+        align-items: center;  
+        background: #222;  
+        padding: 10px;  
+        gap: 10px;  
+    }  
+    .main-search .sidebar-textarea {  
+        flex: 1;  
+        height: 35px;  
+        resize: none;  
+        background: #111;  
+        color: white;  
+        border: none;  
+        padding: 5px;  
+    }  
+    .main-search .sidebar-search-icon {  
+        color: white;  
+    }  
+</style>
 
-    <!-- ==== Premium Google Font ==== -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>  
+<body>  
+    <div class="loading-dot" id="loadingDot"></div>  <!-- HEADER -->  
+<div class="header" id="header">  
+    <div class="header-title-container">  
+        <div class="header-title">FREE FIRE VAULT</div>  
+        <div class="header-menu" id="menuButton">  
+            <i class="fas fa-bars"></i>  
+        </div>  
+    </div>  
+</div>  
 
-    <style>
-        /* ==== Animated Gradient Background ==== */
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(-45deg, #0f0f0f, #1a1a1a, #2c2c2c, #141414);
-            background-size: 400% 400%;
-            animation: gradientMove 15s ease infinite;
-            color: white;
-        }
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        * {
-            transition: all 0.3s ease;
-        }
+<!-- 🔍 SEARCH BOX ON MAIN SCREEN -->  
+<div class="main-search">  
+    <i class="fas fa-search sidebar-search-icon"></i>  
+    <textarea class="sidebar-textarea" id="searchMain" placeholder="Search by item details"></textarea>  
+</div>  
 
-        /* ==== Header ==== */
-        .header {
-            background: linear-gradient(90deg, #ff4b2b, #ff416c);
-            padding: 14px;
-            box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
-        }
-        .header-title {
-            font-size: 1.6rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-        }
-        .header-menu i {
-            font-size: 1.3rem;
-            cursor: pointer;
-        }
+<!-- SIDEBAR -->  
+<div class="sidebar" id="sidebar">  
+    <div class="sidebar-close" id="sidebarClose">  
+        <i class="fas fa-times"></i>  
+    </div>  
+    <div class="sidebar-search">  
+        <i class="fas fa-search sidebar-search-icon"></i>  
+        <textarea class="sidebar-textarea" id="search" placeholder="Search by item details"></textarea>  
+    </div>  
+    <div class="sidebar-menu">  
+        <div class="sidebar-menu-item" id="rarityMenu">  
+            <span>Rarity</span>  
+            <i class="fas fa-chevron-right"></i>  
+        </div>  
+        <div class="sidebar-submenu" id="raritySubmenu">  
+            <div class="sidebar-filter-options" id="filter-Rare-buttons"></div>  
+        </div>  
+        <div class="sidebar-menu-item" id="sortMenu">  
+            <span>Sort By</span>  
+            <i class="fas fa-chevron-right"></i>  
+        </div>  
+        <div class="sidebar-submenu" id="sortSubmenu">  
+            <div class="sidebar-filter-options" id="filter-sort-buttons"></div>  
+        </div>  
+        <div class="sidebar-menu-item" id="collectionsMenu">  
+            <span>Collections</span>  
+            <i class="fas fa-chevron-right"></i>  
+        </div>  
+        <div class="sidebar-submenu" id="collectionsSubmenu">  
+            <div class="sidebar-filter-options" id="filter-collectionType-buttons"></div>  
+        </div>  
+        <div class="sidebar-menu-item" id="typesMenu">  
+            <span>Item Types</span>  
+            <i class="fas fa-chevron-right"></i>  
+        </div>  
+        <div class="sidebar-submenu" id="typesSubmenu">  
+            <div class="sidebar-filter-options" id="filter-itemType-buttons"></div>  
+        </div>  
+    </div>  
+</div>  
 
-        /* ==== Main Search ==== */
-        .main-search {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px 15px;
-            gap: 10px;
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .main-search .sidebar-textarea {
-            flex: 1;
-            height: 40px;
-            resize: none;
-            background: rgba(255, 255, 255, 0.08);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            font-size: 14px;
-            border-radius: 8px;
-            outline: none;
-        }
-        .main-search .sidebar-textarea:focus {
-            box-shadow: 0 0 10px rgba(255,255,255,0.2);
-        }
-        .main-search .sidebar-search-icon {
-            font-size: 1.2rem;
-            color: #ff416c;
-        }
+<div class="filter-tabs" id="filterTabs"></div>  
 
-        /* ==== Sidebar ==== */
-        .sidebar {
-            background: rgba(20,20,20,0.95);
-            backdrop-filter: blur(12px);
-            width: 250px;
-            padding: 20px;
-            box-shadow: 4px 0 20px rgba(0,0,0,0.5);
-        }
-        .sidebar-menu-item {
-            padding: 12px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            margin: 6px 0;
-            cursor: pointer;
-        }
-        .sidebar-menu-item:hover {
-            background: rgba(255,255,255,0.15);
-        }
+<div class="container" id="container" style="display: none;">  
+    <div class="grid-container" id="iconGrid"></div>  
+    <div class="pagination-container">  
+        <div class="pagination" id="pagination"></div>  
+    </div>  
+</div>  
 
-        /* ==== Item Grid ==== */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            padding: 20px;
-        }
-        .grid-container .item {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            overflow: hidden;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transform: scale(1);
-        }
-        .grid-container .item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 25px rgba(255,65,108,0.5);
-        }
+<!-- MODAL -->  
+<div class="modal" id="modal">  
+    <div class="modal-bg"></div>  
+    <div class="modal-img-container" id="modalImgContainer">  
+        <img id="modalTempImage" alt="Item Image">  
+    </div>  
+    <div class="modal-content">  
+        <img id="modalImage" alt="Item Image">  
+        <p>  
+            <b id="modalDescription"></b>  
+            <br>  
+            <span id="modalDescription2"></span>  
+        </p>  
+        <div class="divider"></div>  
+        <p>  
+            <b>Item ID: </b>  
+            <span id="modalItemId"></span>  
+            <br>  
+            <b>Icon: </b>  
+            <span id="modalIconName"></span>  
+        </p>  
+        <div class="divider"></div>  
+        <p>  
+            <b></b>  
+            <span id="modalType"></span>, <b></b>  
+            <span id="modalRare"></span>  
+        </p>  
+        <button class="modal-close" onclick="closeModal()">Tap to close</button>  
+    </div>  
+</div>  
 
-        /* ==== Modal ==== */
-        .modal-content {
-            background: rgba(20,20,20,0.95);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.6);
-        }
-        .modal button {
-            background: linear-gradient(90deg, #ff416c, #ff4b2b);
-            border: none;
-            color: white;
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        .modal button:hover {
-            opacity: 0.9;
-        }
-    </style>
-</head>
-<body>
-    <!-- HEADER -->
-    <div class="header" id="header">
-        <div class="header-title-container">
-            <div class="header-title">FREE FIRE VAULT</div>
-            <div class="header-menu" id="menuButton">
-                <i class="fas fa-bars"></i>
-            </div>
-        </div>
-    </div>
+<script src="https://item-starexx.vercel.app/src/script.js"></script>  
 
-    <!-- Main Search -->
-    <div class="main-search">
-        <i class="fas fa-search sidebar-search-icon"></i>
-        <textarea class="sidebar-textarea" id="searchMain" placeholder="Search by item details"></textarea>
-    </div>
+<!-- JS to sync main search with sidebar search -->  
+<script>  
+    const searchMain = document.getElementById("searchMain");  
+    const searchSidebar = document.getElementById("search");  
 
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-search">
-            <i class="fas fa-search sidebar-search-icon"></i>
-            <textarea class="sidebar-textarea" id="search" placeholder="Search by item details"></textarea>
-        </div>
-        <div class="sidebar-menu">
-            <div class="sidebar-menu-item">Rarity</div>
-            <div class="sidebar-menu-item">Sort By</div>
-            <div class="sidebar-menu-item">Collections</div>
-            <div class="sidebar-menu-item">Item Types</div>
-        </div>
-    </div>
+    searchMain.addEventListener("input", function () {  
+        searchSidebar.value = this.value;  
+        searchSidebar.dispatchEvent(new Event("input"));  
+    });  
 
-    <!-- Container -->
-    <div class="container" id="container">
-        <div class="grid-container" id="iconGrid">
-            <div class="item">Sample Item</div>
-            <div class="item">Sample Item</div>
-            <div class="item">Sample Item</div>
-        </div>
-    </div>
+    searchSidebar.addEventListener("input", function () {  
+        searchMain.value = this.value;  
+    });  
+</script>
 
-    <!-- Modal -->
-    <div class="modal" id="modal" style="display:none;">
-        <div class="modal-content">
-            <p><b>Item Details</b></p>
-            <button onclick="document.getElementById('modal').style.display='none'">Close</button>
-        </div>
-    </div>
-
-    <script>
-        // Sync search boxes
-        const searchMain = document.getElementById("searchMain");
-        const searchSidebar = document.getElementById("search");
-
-        searchMain.addEventListener("input", function () {
-            searchSidebar.value = this.value;
-        });
-
-        searchSidebar.addEventListener("input", function () {
-            searchMain.value = this.value;
-        });
-    </script>
-</body>
-</html>
+</body>  
+    </html>
