@@ -99,7 +99,7 @@ async function displayPage(pageNumber, searchTerm, webps) {
 
     let imgSrc = `https://raw.githubusercontent.com/starexxx/FFItems/5dd347a94489bfcf99d3537d0800eca32c7a7a08/assets/error-404.png`;
     if (pngs_json_list?.includes(item.icon + ".png")) {
-      imgSrc = `https://raw.githubusercontent.com/I-SHOW-AKIRU200/AKIRU-ICONS/main/ICONS/${item.icon}.png`;
+      imgSrc = `https://raw.githubusercontent.com/usggffgg/GMG-ICONS/main/ICONS/${item.icon}.png`;
     } else {
       const value = cdn_img_json[item.itemID?.toString()] ?? null;
       if (value) imgSrc = value;
