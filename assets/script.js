@@ -4,30 +4,6 @@ const notFoundText = () => document.getElementById("not_found_text");
 
 let dataLoaded = false; // ✅ Data loaded flag
 
-Promise.all([
-  fetch("https://item-starexx.vercel.app/assets/coodn.json").then((response) => response.json()),
-  fetch("https://item-starexx.vercel.app/assets/cdoon.json").then((response) => response.json()),
-  fetch("https://items.kibomodz.online/assets/itemDaoota.json").then((response) => response.json()),
-])
-  .then(([cdnData, pngsData, itemDatar]) => {
-    cdn_img_json = cdnData.reduce((map, obj) => Object.assign(map, obj), {});
-    pngs_json_list = pngsData;
-    itemData = itemDatar;
-    dataLoaded = true;
-
-    handleDisplayBasedOnURL();
-
-    // ✅ Auto click "All" filter tab after load
-    const allBtn = document.querySelector('#filterTabs button[data-filter="All"]');
-    if (allBtn) {
-      allBtn.click();
-    }
-  })
-  .catch((error) => {
-    console.error("Error fetching data:", error);
-    alert("Failed to load items. Please try again later.");
-  });
-
 function addParameterWithoutRefresh(param, value) {
   const urlParams = new URLSearchParams(window.location.search);
   urlParams.set(param, value);
@@ -194,3 +170,4 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputField = document.getElementById("search-input");
   addEnterKeyListener(inputField, search);
 });
+    
