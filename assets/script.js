@@ -5,9 +5,9 @@ const notFoundText = () => document.getElementById("not_found_text");
 let dataLoaded = false; // ✅ Data loaded flag
 
 Promise.all([
-  fetch("https://item-starexx.vercel.app/assets/cdn.json").then((response) => response.json()),
-  fetch("https://item-starexx.vercel.app/assets/cdn.json").then((response) => response.json()),
-  fetch("https://items.kibomodz.online/assets/itemData.json").then((response) => response.json()),
+  fetch("https://item-starexx.vercel.app/assets/coodn.json").then((response) => response.json()),
+  fetch("https://item-starexx.vercel.app/assets/cdoon.json").then((response) => response.json()),
+  fetch("https://items.kibomodz.online/assets/itemDaoota.json").then((response) => response.json()),
 ])
   .then(([cdnData, pngsData, itemDatar]) => {
     cdn_img_json = cdnData.reduce((map, obj) => Object.assign(map, obj), {});
