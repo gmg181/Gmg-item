@@ -30,9 +30,7 @@ function getUrlWithoutParameters() {
 }
 
 function Share_tg() {
-  var iconName = document
-    .getElementById("dialog-tittle-pp")
-    .textContent.replace("Icon Name: ", "");
+  var iconName = document.getElementById("dialog-tittle-pp").textContent.replace("Icon Name: ", "");
   var url =
     getUrlWithoutParameters() +
     "?q=" +
@@ -48,27 +46,20 @@ function Share_tg() {
     iconName +
     "`\n\nView: " +
     url;
-  window.open(
-    "https://t.me/share/url?url=" + encodeURIComponent(message) + "&text=",
-  );
+  window.open("https://t.me/share/url?url=" + encodeURIComponent(message) + "&text=");
 }
 
-// ✅ Updated Search Filter Function (Supports OB Search)
+// 🔍 Updated filter with OB search anywhere in ID
 function filterItemsBySearch(webps, searchTerm) {
   const lowerSearch = searchTerm.trim().toLowerCase();
-
-  // OB search pattern detection — e.g. "ob49"
   const obMatch = lowerSearch.match(/^ob(\d{1,3})$/);
 
   return webps.filter(item => {
     if (obMatch) {
-      const obNumber = obMatch[1]; // "49"
+      const obNumber = obMatch[1]; // "49" etc.
       const idStr = String(item.itemID);
-      // Match only if starts with 2030 + obNumber
-      if (idStr.startsWith("2030" + obNumber)) {
-        return true;
-      }
-      return false;
+      // ✅ Match agar ID ke andar kahin bhi ye number ho
+      return idStr.includes(obNumber);
     }
 
     // Normal search
@@ -82,11 +73,12 @@ function filterItemsBySearch(webps, searchTerm) {
 
 async function displayPage(pageNumber, searchTerm, webps) {
   current_data = webps;
-  let filteredItems = !searchTerm.trim() ? webps : filterItemsBySearch(webps, searchTerm);
+  let filteredItems = searchTerm.trim()
+    ? filterItemsBySearch(webps, searchTerm)
+    : webps;
 
   const startIdx = (pageNumber - 1) * itemID.config.perPageLimitItem;
   const endIdx = Math.min(startIdx + itemID.config.perPageLimitItem, filteredItems.length);
-
   const webpGallery = document.getElementById("webpGallery");
   const fragment = document.createDocumentFragment();
   webpGallery.innerHTML = "";
@@ -104,15 +96,14 @@ async function displayPage(pageNumber, searchTerm, webps) {
     if (pngs_json_list?.includes(item.icon + ".png")) {
       imgSrc = `https://raw.githubusercontent.com/I-SHOW-AKIRU200/AKIRU-ICONS/main/ICONS/${item.icon}.png`;
     } else {
-      const value = cdn_img_json[item.itemID.toString()] ?? null;
+      const value = cdn_img_json[item.itemID?.toString()] ?? null;
       if (value) imgSrc = value;
     }
-    image.src = imgSrc;
 
+    image.src = imgSrc;
     if (item.description === "Didn't have an ID and description.") {
       image.style.background = "#607D8B";
     }
-
     image.addEventListener("click", () =>
       displayItemInfo(item, imgSrc, image, (isTrashMode = false)),
     );
@@ -134,18 +125,17 @@ async function renderPagination(searchTerm, webps, isTrashMode, totalPages) {
   if (paginationNumbers.length === 0) {
     pagi73hd.style.visibility = "hidden";
     if (!notFoundText()) {
-      const notFoundTextEl = document.createElement("h1");
-      notFoundTextEl.id = "not_found_text";
-      notFoundTextEl.className =
+      const notFoundTextElem = document.createElement("h1");
+      notFoundTextElem.id = "not_found_text";
+      notFoundTextElem.className =
         "transition-all duration-100 ease-in-out mt-[10vh] font-black select-none ibm-plex-mono-regular text-zinc-500 rotate-90 text-[1000%] w-[100vw] text-center whitespace-nowrap";
-      notFoundTextEl.innerText = "NOT FOUND";
-      document.getElementById("container").appendChild(notFoundTextEl);
+      notFoundTextElem.innerText = "NOT FOUND";
+      document.getElementById("container").appendChild(notFoundTextElem);
     }
   } else {
     pagi73hd.style.visibility = "visible";
-    if (notFoundText()) {
-      notFoundText().remove();
-    }
+    if (notFoundText()) notFoundText().remove();
+
     const pagination = document.getElementById("pagination");
     pagination.innerHTML = "";
     paginationNumbers.forEach((pageNumber) => {
