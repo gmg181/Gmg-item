@@ -3,13 +3,8 @@ const extra_set = document.getElementById("extra_set");
 const notFoundText = () => document.getElementById("not_found_text");
 
 Promise.all([
-
   fetch("https://item-starexx.vercel.app/assets/cdn.json").then((response) => response.json()),
-
-  fetch(
-    `https://item-starexx.vercel.app/assets/cdn.json`,
-  ).then((response) => response.json()),
-
+  fetch("https://item-starexx.vercel.app/assets/cdn.json").then((response) => response.json()),
   fetch("https://items.kibomodz.online/assets/itemData.json").then((response) => response.json()),
 ])
   .then(([cdnData, pngsData, itemDatar]) => {
@@ -31,8 +26,7 @@ function addParameterWithoutRefresh(param, value) {
 }
 
 function getUrlWithoutParameters() {
-  const newUrl = `${window.location.origin}${window.location.pathname}`;
-  return newUrl;
+  return `${window.location.origin}${window.location.pathname}`;
 }
 
 function Share_tg() {
@@ -59,18 +53,19 @@ function Share_tg() {
   );
 }
 
-// ✅ Search filter function with OB search support
+// ✅ Updated Search Filter Function (Supports OB Search)
 function filterItemsBySearch(webps, searchTerm) {
   const lowerSearch = searchTerm.trim().toLowerCase();
 
-  // OB search detection: example "ob49"
+  // OB search pattern detection — e.g. "ob49"
   const obMatch = lowerSearch.match(/^ob(\d{1,3})$/);
 
   return webps.filter(item => {
     if (obMatch) {
-      const obNumber = obMatch[1]; // e.g. "49"
+      const obNumber = obMatch[1]; // "49"
       const idStr = String(item.itemID);
-      if (idStr.length >= 6 && idStr.substring(4, 6) === obNumber) {
+      // Match only if starts with 2030 + obNumber
+      if (idStr.startsWith("2030" + obNumber)) {
         return true;
       }
       return false;
@@ -78,7 +73,7 @@ function filterItemsBySearch(webps, searchTerm) {
 
     // Normal search
     return (
-      String(item.itemID).includes(lowerSearch) ||
+      String(item.itemID).toLowerCase().includes(lowerSearch) ||
       item.description?.toLowerCase().includes(lowerSearch) ||
       item.icon?.toLowerCase().includes(lowerSearch)
     );
@@ -87,20 +82,15 @@ function filterItemsBySearch(webps, searchTerm) {
 
 async function displayPage(pageNumber, searchTerm, webps) {
   current_data = webps;
-  let filteredItems;
-  if (!searchTerm.trim()) {
-    filteredItems = webps;
-  } else {
-    filteredItems = filterItemsBySearch(webps, searchTerm);
-  }
+  let filteredItems = !searchTerm.trim() ? webps : filterItemsBySearch(webps, searchTerm);
+
   const startIdx = (pageNumber - 1) * itemID.config.perPageLimitItem;
-  const endIdx = Math.min(
-    startIdx + itemID.config.perPageLimitItem,
-    filteredItems.length,
-  );
+  const endIdx = Math.min(startIdx + itemID.config.perPageLimitItem, filteredItems.length);
+
   const webpGallery = document.getElementById("webpGallery");
   const fragment = document.createDocumentFragment();
   webpGallery.innerHTML = "";
+
   for (let i = startIdx; i < endIdx; i++) {
     const item = filteredItems[i];
     const image = document.createElement("img");
@@ -114,31 +104,33 @@ async function displayPage(pageNumber, searchTerm, webps) {
     if (pngs_json_list?.includes(item.icon + ".png")) {
       imgSrc = `https://raw.githubusercontent.com/I-SHOW-AKIRU200/AKIRU-ICONS/main/ICONS/${item.icon}.png`;
     } else {
-      const keyToFind = item?.itemID ? String(item.itemID) : "Not Provided";
       const value = cdn_img_json[item.itemID.toString()] ?? null;
       if (value) imgSrc = value;
     }
     image.src = imgSrc;
+
     if (item.description === "Didn't have an ID and description.") {
       image.style.background = "#607D8B";
     }
+
     image.addEventListener("click", () =>
       displayItemInfo(item, imgSrc, image, (isTrashMode = false)),
     );
-    
+
     fragment.appendChild(image);
   }
+
   webpGallery.appendChild(fragment);
-  let totalPages = Math.ceil(
-    filteredItems.length / itemID.config.perPageLimitItem,
-  );
-  renderPagination(searchTerm, webps, (isTrashMode = false), totalPages); // Render pagination
+
+  let totalPages = Math.ceil(filteredItems.length / itemID.config.perPageLimitItem);
+  renderPagination(searchTerm, webps, (isTrashMode = false), totalPages);
   updateUrl();
 }
 
 async function renderPagination(searchTerm, webps, isTrashMode, totalPages) {
   const paginationNumbers = await generatePaginationNumbers(totalPages);
   const pagi73hd = document.getElementById("pagi73hd");
+
   if (paginationNumbers.length === 0) {
     pagi73hd.style.visibility = "hidden";
     if (!notFoundText()) {
