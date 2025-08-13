@@ -58,6 +58,33 @@ function Share_tg() {
     "https://t.me/share/url?url=" + encodeURIComponent(message) + "&text=",
   );
 }
+
+// ✅ Search filter function with OB search support
+function filterItemsBySearch(webps, searchTerm) {
+  const lowerSearch = searchTerm.trim().toLowerCase();
+
+  // OB search detection: example "ob49"
+  const obMatch = lowerSearch.match(/^ob(\d{1,3})$/);
+
+  return webps.filter(item => {
+    if (obMatch) {
+      const obNumber = obMatch[1]; // e.g. "49"
+      const idStr = String(item.itemID);
+      if (idStr.length >= 6 && idStr.substring(4, 6) === obNumber) {
+        return true;
+      }
+      return false;
+    }
+
+    // Normal search
+    return (
+      String(item.itemID).includes(lowerSearch) ||
+      item.description?.toLowerCase().includes(lowerSearch) ||
+      item.icon?.toLowerCase().includes(lowerSearch)
+    );
+  });
+}
+
 async function displayPage(pageNumber, searchTerm, webps) {
   current_data = webps;
   let filteredItems;
@@ -115,12 +142,12 @@ async function renderPagination(searchTerm, webps, isTrashMode, totalPages) {
   if (paginationNumbers.length === 0) {
     pagi73hd.style.visibility = "hidden";
     if (!notFoundText()) {
-      const notFoundText = document.createElement("h1");
-      notFoundText.id = "not_found_text";
-      notFoundText.className =
+      const notFoundTextEl = document.createElement("h1");
+      notFoundTextEl.id = "not_found_text";
+      notFoundTextEl.className =
         "transition-all duration-100 ease-in-out mt-[10vh] font-black select-none ibm-plex-mono-regular text-zinc-500 rotate-90 text-[1000%] w-[100vw] text-center whitespace-nowrap";
-      notFoundText.innerText = "NOT FOUND";
-      document.getElementById("container").appendChild(notFoundText);
+      notFoundTextEl.innerText = "NOT FOUND";
+      document.getElementById("container").appendChild(notFoundTextEl);
     }
   } else {
     pagi73hd.style.visibility = "visible";
