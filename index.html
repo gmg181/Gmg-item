@@ -51,6 +51,25 @@
             border-radius: 4px;
             pointer-events: none;
         }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 10px;
+            background: #111;
+        }
+        .filter-tabs button {
+            padding: 5px 12px;
+            background: #222;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .filter-tabs button.active {
+            background: #ff9800;
+        }
     </style>
 </head>
 <body>
@@ -81,39 +100,12 @@
             <i class="fas fa-search sidebar-search-icon"></i>
             <textarea class="sidebar-textarea" id="search" placeholder="Search by item details"></textarea>
         </div>
-        <div class="sidebar-menu">
-            <div class="sidebar-menu-item" id="rarityMenu">
-                <span>Rarity</span>
-                <i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="sidebar-submenu" id="raritySubmenu">
-                <div class="sidebar-filter-options" id="filter-Rare-buttons"></div>
-            </div>
-            <div class="sidebar-menu-item" id="sortMenu">
-                <span>Sort By</span>
-                <i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="sidebar-submenu" id="sortSubmenu">
-                <div class="sidebar-filter-options" id="filter-sort-buttons"></div>
-            </div>
-            <div class="sidebar-menu-item" id="collectionsMenu">
-                <span>Collections</span>
-                <i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="sidebar-submenu" id="collectionsSubmenu">
-                <div class="sidebar-filter-options" id="filter-collectionType-buttons"></div>
-            </div>
-            <div class="sidebar-menu-item" id="typesMenu">
-                <span>Item Types</span>
-                <i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="sidebar-submenu" id="typesSubmenu">
-                <div class="sidebar-filter-options" id="filter-itemType-buttons"></div>
-            </div>
-        </div>
     </div>
 
-    <div class="filter-tabs" id="filterTabs"></div>
+    <!-- Only "All" filter tab -->
+    <div class="filter-tabs" id="filterTabs">
+        <button class="active" data-filter="All">All</button>
+    </div>
 
     <div class="container" id="container" style="display: none;">
         <div class="grid-container" id="iconGrid"></div>
@@ -146,8 +138,7 @@
             </p>
             <div class="divider"></div>
             <p>
-                <b></b>
-                <span id="modalType"></span>, <b></b>
+                <span id="modalType"></span>, 
                 <span id="modalRare"></span>
             </p>
             <button class="modal-close" onclick="closeModal()">Tap to close</button>
