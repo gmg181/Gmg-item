@@ -1,173 +1,182 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-    <title>FREE FIRE VAULT</title>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">  
-    <meta name="author" content="Starexx">  
-    <meta name="og:title" content="Starexx Items">  
-    <meta property="og:image" content="assets/og.jpg">  
-    <meta name="og:description" content="Search Free Fire game items by name or description to retrieve item ID, name & details.">  
-    <meta name="google-site-verification" content="J20YkdBYbFS0_YZdIu9Z-sKGKzYZfqOFFkQ0numjLq0">  
-    <meta name="description" content="Free Fire is a multiplayer battle royale mobile game, developed and published by Garena for Android and iOS. Battle in Style and be the last survivor!">  
-    <meta name="keywords" content="survival, last survivor, battle royale, free mobile game, garena game, craftland, ugc, starexz.m, ff craftland, ankit-mehta, starexx7, Starexx, starexx, craftland tutorial, free fire craftland, ff-item, Free Fire Info, FFInfo, FFItems, ffitems, ItemsFF, Starexx FFItems, FF-Items">  
-    <link rel="stylesheet" href="https://item-starexx.vercel.app/src/styles.css">  <style>  
-    /* 🔍 Main screen search bar styling */  
-    .main-search {  
-        display: flex;  
-        align-items: center;  
-        background: #222;  
-        padding: 10px;  
-        gap: 10px;  
-    }  
-    .main-search .sidebar-textarea {  
-        flex: 1;  
-        height: 35px;  
-        resize: none;  
-        background: #111;  
-        color: white;  
-        border: none;  
-        padding: 5px;  
-    }  
-    .main-search .sidebar-search-icon {  
-        color: white;  
-    }  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FREE FIRE VAULT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="author" content="Starexx">
+    <meta name="og:title" content="Starexx Items">
+    <meta property="og:image" content="assets/og.jpg">
+    <meta name="og:description" content="Search Free Fire game items by name or description to retrieve item ID, name & details.">
+    <meta name="description" content="Free Fire is a multiplayer battle royale mobile game, developed and published by Garena for Android and iOS.">
+    <meta name="keywords" content="free fire, ff items, item id search, OB49, Starexx">
 
-    /* 🏷 Credit overlay only in modal */  
-    .modal-img-container {  
-        position: relative;  
-    }  
-    .modal-credit {  
-        position: absolute;  
-        bottom: 10px;  
-        right: 10px;  
-        background: rgba(0,0,0,0.6);  
-        color: white;  
-        font-size: 12px;  
-        padding: 3px 6px;  
-        border-radius: 4px;  
-        pointer-events: none;  
-    }  
-</style>
+    <link rel="stylesheet" href="https://item-starexx.vercel.app/src/styles.css">
+    <style>
+        /* Main search */
+        .main-search {
+            display: flex;
+            align-items: center;
+            background: #222;
+            padding: 10px;
+            gap: 10px;
+        }
+        .main-search .sidebar-textarea {
+            flex: 1;
+            height: 35px;
+            resize: none;
+            background: #111;
+            color: white;
+            border: none;
+            padding: 5px;
+        }
+        .main-search .sidebar-search-icon {
+            color: white;
+        }
 
-</head>  
-<body>  
-    <div class="loading-dot" id="loadingDot"></div>  <!-- HEADER -->  
-<div class="header" id="header">  
-    <div class="header-title-container">  
-        <div class="header-title">FREE FIRE VAULT</div>  
-        <div class="header-menu" id="menuButton">  
-            <i class="fas fa-bars"></i>  
-        </div>  
-    </div>  
-</div>  
+        /* OB49 search box styling */
+        .id-search {
+            display: flex;
+            align-items: center;
+            background: #2d2d2d;
+            padding: 10px;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .id-search input {
+            flex: 1;
+            height: 35px;
+            background: #111;
+            color: white;
+            border: none;
+            padding: 5px;
+        }
+        .id-search .fa-hashtag {
+            color: white;
+        }
 
-<!-- 🔍 SEARCH BOX ON MAIN SCREEN -->  
-<div class="main-search">  
-    <i class="fas fa-search sidebar-search-icon"></i>  
-    <textarea class="sidebar-textarea" id="searchMain" placeholder="Search by item details"></textarea>  
-</div>  
+        /* Credit overlay in modal */
+        .modal-img-container {
+            position: relative;
+        }
+        .modal-credit {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 12px;
+            padding: 3px 6px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-dot" id="loadingDot"></div>
 
-<!-- SIDEBAR -->  
-<div class="sidebar" id="sidebar">  
-    <div class="sidebar-close" id="sidebarClose">  
-        <i class="fas fa-times"></i>  
-    </div>  
-    <div class="sidebar-search">  
-        <i class="fas fa-search sidebar-search-icon"></i>  
-        <textarea class="sidebar-textarea" id="search" placeholder="Search by item details"></textarea>  
-    </div>  
-    <div class="sidebar-menu">  
-        <div class="sidebar-menu-item" id="rarityMenu">  
-            <span>Rarity</span>  
-            <i class="fas fa-chevron-right"></i>  
-        </div>  
-        <div class="sidebar-submenu" id="raritySubmenu">  
-            <div class="sidebar-filter-options" id="filter-Rare-buttons"></div>  
-        </div>  
-        <div class="sidebar-menu-item" id="sortMenu">  
-            <span>Sort By</span>  
-            <i class="fas fa-chevron-right"></i>  
-        </div>  
-        <div class="sidebar-submenu" id="sortSubmenu">  
-            <div class="sidebar-filter-options" id="filter-sort-buttons"></div>  
-        </div>  
-        <div class="sidebar-menu-item" id="collectionsMenu">  
-            <span>Collections</span>  
-            <i class="fas fa-chevron-right"></i>  
-        </div>  
-        <div class="sidebar-submenu" id="collectionsSubmenu">  
-            <div class="sidebar-filter-options" id="filter-collectionType-buttons"></div>  
-        </div>  
-        <div class="sidebar-menu-item" id="typesMenu">  
-            <span>Item Types</span>  
-            <i class="fas fa-chevron-right"></i>  
-        </div>  
-        <div class="sidebar-submenu" id="typesSubmenu">  
-            <div class="sidebar-filter-options" id="filter-itemType-buttons"></div>  
-        </div>  
-    </div>  
-</div>  
+    <!-- HEADER -->
+    <div class="header" id="header">
+        <div class="header-title-container">
+            <div class="header-title">FREE FIRE VAULT</div>
+            <div class="header-menu" id="menuButton">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </div>
 
-<div class="filter-tabs" id="filterTabs"></div>  
+    <!-- 🔍 Normal search -->
+    <div class="main-search">
+        <i class="fas fa-search sidebar-search-icon"></i>
+        <textarea class="sidebar-textarea" id="searchMain" placeholder="Search by item details"></textarea>
+    </div>
 
-<div class="container" id="container" style="display: none;">  
-    <div class="grid-container" id="iconGrid"></div>  
-    <div class="pagination-container">  
-        <div class="pagination" id="pagination"></div>  
-    </div>  
-</div>  
+    <!-- 🆕 OB49 ID search -->
+    <div class="id-search">
+        <i class="fas fa-hashtag"></i>
+        <input type="text" id="searchById" placeholder="Search by ID (Partial e.g. 49)">
+    </div>
 
-<!-- MODAL -->  
-<div class="modal" id="modal">  
-    <div class="modal-bg"></div>  
-    <div class="modal-img-container" id="modalImgContainer">  
-        <img id="modalTempImage" alt="Item Image">  
-        <div class="modal-credit">Credit: GMG</div>  
-    </div>  
-    <div class="modal-content">  
-        <img id="modalImage" alt="Item Image">  
-        <p>  
-            <b id="modalDescription"></b>  
-            <br>  
-            <span id="modalDescription2"></span>  
-        </p>  
-        <div class="divider"></div>  
-        <p>  
-            <b>Item ID: </b>  
-            <span id="modalItemId"></span>  
-            <br>  
-            <b>Icon: </b>  
-            <span id="modalIconName"></span>  
-        </p>  
-        <div class="divider"></div>  
-        <p>  
-            <b></b>  
-            <span id="modalType"></span>, <b></b>  
-            <span id="modalRare"></span>  
-        </p>  
-        <button class="modal-close" onclick="closeModal()">Tap to close</button>  
-    </div>  
-</div>  
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-close" id="sidebarClose">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="sidebar-search">
+            <i class="fas fa-search sidebar-search-icon"></i>
+            <textarea class="sidebar-textarea" id="search" placeholder="Search by item details"></textarea>
+        </div>
+    </div>
 
-<script src="https://item-starexx.vercel.app/src/script.js"></script>  
+    <div class="container" id="container" style="display: none;">
+        <div class="grid-container" id="iconGrid"></div>
+        <div class="pagination-container">
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
 
-<!-- JS to sync main search with sidebar search -->  
-<script>  
-    const searchMain = document.getElementById("searchMain");  
-    const searchSidebar = document.getElementById("search");  
+    <!-- MODAL -->
+    <div class="modal" id="modal">
+        <div class="modal-bg"></div>
+        <div class="modal-img-container" id="modalImgContainer">
+            <img id="modalTempImage" alt="Item Image">
+            <div class="modal-credit">Credit: GMG</div>
+        </div>
+        <div class="modal-content">
+            <img id="modalImage" alt="Item Image">
+            <p>
+                <b id="modalDescription"></b><br>
+                <span id="modalDescription2"></span>
+            </p>
+            <div class="divider"></div>
+            <p>
+                <b>Item ID: </b>
+                <span id="modalItemId"></span><br>
+                <b>Icon: </b>
+                <span id="modalIconName"></span>
+            </p>
+            <div class="divider"></div>
+            <p>
+                <span id="modalType"></span>, <span id="modalRare"></span>
+            </p>
+            <button class="modal-close" onclick="closeModal()">Tap to close</button>
+        </div>
+    </div>
 
-    searchMain.addEventListener("input", function () {  
-        searchSidebar.value = this.value;  
-        searchSidebar.dispatchEvent(new Event("input"));  
-    });  
+    <script src="https://item-starexx.vercel.app/src/script.js"></script>
 
-    searchSidebar.addEventListener("input", function () {  
-        searchMain.value = this.value;  
-    });  
-</script>
+    <!-- JS to sync normal search -->
+    <script>
+        const searchMain = document.getElementById("searchMain");
+        const searchSidebar = document.getElementById("search");
+        const searchById = document.getElementById("searchById");
 
-</body>  
+        // Normal search sync
+        searchMain.addEventListener("input", function () {
+            searchSidebar.value = this.value;
+            searchSidebar.dispatchEvent(new Event("input"));
+        });
+        searchSidebar.addEventListener("input", function () {
+            searchMain.value = this.value;
+        });
+
+        // OB49 ID search (partial match anywhere in ID)
+        searchById.addEventListener("input", function () {
+            const query = this.value.trim();
+            if (!window.allItems) return; // ensure items loaded
+
+            const filtered = window.allItems.filter(item =>
+                item.id.toString().includes(query)
+            );
+
+            renderItems(filtered); // function from script.js
+        });
+
+        // Hook into existing data load
+        document.addEventListener("itemsLoaded", function(e) {
+            window.allItems = e.detail; // store all items globally for OB49 search
+        });
+    </script>
+</body>
     </html>
-
-                
