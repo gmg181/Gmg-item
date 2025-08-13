@@ -2,6 +2,8 @@ const bodyElement = document.body;
 const extra_set = document.getElementById("extra_set");
 const notFoundText = () => document.getElementById("not_found_text");
 
+let dataLoaded = false; // ✅ Data loaded flag
+
 Promise.all([
   fetch("https://item-starexx.vercel.app/assets/cdn.json").then((response) => response.json()),
   fetch("https://item-starexx.vercel.app/assets/cdn.json").then((response) => response.json()),
@@ -11,11 +13,19 @@ Promise.all([
     cdn_img_json = cdnData.reduce((map, obj) => Object.assign(map, obj), {});
     pngs_json_list = pngsData;
     itemData = itemDatar;
+    dataLoaded = true;
 
     handleDisplayBasedOnURL();
+
+    // ✅ Auto click "All" filter tab after load
+    const allBtn = document.querySelector('#filterTabs button[data-filter="All"]');
+    if (allBtn) {
+      allBtn.click();
+    }
   })
   .catch((error) => {
     console.error("Error fetching data:", error);
+    alert("Failed to load items. Please try again later.");
   });
 
 function addParameterWithoutRefresh(param, value) {
@@ -160,10 +170,10 @@ async function renderPagination(searchTerm, webps, isTrashMode, totalPages) {
   }
 }
 
-// ✅ On load: force only "All" tab
 document.addEventListener("DOMContentLoaded", () => {
   initializeInterfaceEdgeBtn();
 
+  // ✅ Filter tabs create
   const filterTabs = document.getElementById("filterTabs");
   if (filterTabs) {
     filterTabs.innerHTML = "";
@@ -174,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".filter-tabs button").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-      if (typeof filterItems === "function") {
+      if (typeof filterItems === "function" && dataLoaded) {
         filterItems("All");
       }
     });
