@@ -160,8 +160,27 @@ async function renderPagination(searchTerm, webps, isTrashMode, totalPages) {
   }
 }
 
+// ✅ On load: force only "All" tab
 document.addEventListener("DOMContentLoaded", () => {
   initializeInterfaceEdgeBtn();
+
+  const filterTabs = document.getElementById("filterTabs");
+  if (filterTabs) {
+    filterTabs.innerHTML = "";
+    const btn = document.createElement("button");
+    btn.textContent = "All";
+    btn.classList.add("active");
+    btn.dataset.filter = "All";
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter-tabs button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      if (typeof filterItems === "function") {
+        filterItems("All");
+      }
+    });
+    filterTabs.appendChild(btn);
+  }
+
   const inputField = document.getElementById("search-input");
   addEnterKeyListener(inputField, search);
 });
