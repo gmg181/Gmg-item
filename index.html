@@ -36,20 +36,19 @@
             color: white;
         }
 
-        /* 🏷 Credit Overlay Styling */
-        .icon-container {
+        /* 🏷 Credit overlay only in modal */
+        .modal-img-container {
             position: relative;
-            display: inline-block;
         }
-        .icon-credit {
+        .modal-credit {
             position: absolute;
-            bottom: 5px;
-            right: 5px;
+            bottom: 10px;
+            right: 10px;
             background: rgba(0,0,0,0.6);
             color: white;
-            font-size: 10px;
-            padding: 2px 4px;
-            border-radius: 3px;
+            font-size: 12px;
+            padding: 3px 6px;
+            border-radius: 4px;
             pointer-events: none;
         }
     </style>
@@ -128,6 +127,7 @@
         <div class="modal-bg"></div>
         <div class="modal-img-container" id="modalImgContainer">
             <img id="modalTempImage" alt="Item Image">
+            <div class="modal-credit">Credit: GMG</div>
         </div>
         <div class="modal-content">
             <img id="modalImage" alt="Item Image">
@@ -169,27 +169,6 @@
         searchSidebar.addEventListener("input", function () {
             searchMain.value = this.value;
         });
-
-        // 🏷 Function to add GMG credit to all icons
-        function addGMGCredits() {
-            document.querySelectorAll("#iconGrid img").forEach(img => {
-                if (!img.parentElement.querySelector(".icon-credit")) {
-                    let container = document.createElement("div");
-                    container.classList.add("icon-container");
-
-                    img.parentElement.insertBefore(container, img);
-                    container.appendChild(img);
-
-                    let credit = document.createElement("div");
-                    credit.classList.add("icon-credit");
-                    credit.innerText = "Credit: GMG";
-                    container.appendChild(credit);
-                }
-            });
-        }
-
-        // Run every time icons might update
-        setInterval(addGMGCredits, 1000);
     </script>
 </body>
     </html>
