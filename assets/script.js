@@ -2,14 +2,13 @@ const bodyElement = document.body;
 const extra_set = document.getElementById("extra_set");
 const notFoundText = () => document.getElementById("not_found_text");
 
+let cdn_img_json = {};
+let pngs_json_list = [];
+let itemData = [];
+
 Promise.all([
-
   fetch("https://item-starexx.vercel.app/assets/cdn.json").then((response) => response.json()),
-
-  fetch(
-    `https://item-starexx.vercel.app/assets/cdn.json`,
-  ).then((response) => response.json()),
-
+  fetch("https://item-starexx.vercel.app/assets/cdn.json").then((response) => response.json()),
   fetch("https://items.kibomodz.online/assets/itemData.json").then((response) => response.json()),
 ])
   .then(([cdnData, pngsData, itemDatar]) => {
@@ -31,33 +30,36 @@ function addParameterWithoutRefresh(param, value) {
 }
 
 function getUrlWithoutParameters() {
-  const newUrl = `${window.location.origin}${window.location.pathname}`;
-  return newUrl;
+  return `${window.location.origin}${window.location.pathname}`;
 }
 
 function Share_tg() {
-  var iconName = document
-    .getElementById("dialog-tittle-pp")
-    .textContent.replace("Icon Name: ", "");
-  var url =
-    getUrlWithoutParameters() +
-    "?q=" +
-    iconName +
-    "&mode=" +
-    itemID.state.displayMode;
+  var iconName = document.getElementById("dialog-tittle-pp").textContent.replace("Icon Name: ", "");
+  var url = getUrlWithoutParameters() + "?q=" + iconName + "&mode=" + itemID.state.displayMode;
   var message =
-    "Title: `" +
-    document.getElementById("dialog-tittle").textContent +
-    "`\nID: `" +
-    document.getElementById("dialog-tittle-p").textContent.replace("Id: ", "") +
-    "`\nIcon Name: `" +
-    iconName +
-    "`\n\nView: " +
-    url;
-  window.open(
-    "https://t.me/share/url?url=" + encodeURIComponent(message) + "&text=",
-  );
+    "Title: `" + document.getElementById("dialog-tittle").textContent +
+    "`\nID: `" + document.getElementById("dialog-tittle-p").textContent.replace("Id: ", "") +
+    "`\nIcon Name: `" + iconName +
+    "`\n\nView: " + url;
+  window.open("https://t.me/share/url?url=" + encodeURIComponent(message) + "&text=");
 }
+
+// 🔍 UNIVERSAL SEARCH FUNCTION
+function filterItemsBySearch(items, searchTerm) {
+  const lowerSearch = searchTerm.toLowerCase();
+  return items.filter(item => {
+    const combinedData = `
+      ${item.name || ""}
+      ${item.description || ""}
+      ${item.itemID || ""}
+      ${item.icon || ""}
+      ${item.type || ""}
+      ${item.rarity || ""}
+    `.toLowerCase();
+    return combinedData.includes(lowerSearch);
+  });
+}
+
 async function displayPage(pageNumber, searchTerm, webps) {
   current_data = webps;
   let filteredItems;
@@ -66,18 +68,17 @@ async function displayPage(pageNumber, searchTerm, webps) {
   } else {
     filteredItems = filterItemsBySearch(webps, searchTerm);
   }
+
   const startIdx = (pageNumber - 1) * itemID.config.perPageLimitItem;
-  const endIdx = Math.min(
-    startIdx + itemID.config.perPageLimitItem,
-    filteredItems.length,
-  );
+  const endIdx = Math.min(startIdx + itemID.config.perPageLimitItem, filteredItems.length);
   const webpGallery = document.getElementById("webpGallery");
   const fragment = document.createDocumentFragment();
   webpGallery.innerHTML = "";
+
   for (let i = startIdx; i < endIdx; i++) {
     const item = filteredItems[i];
     const image = document.createElement("img");
-    image.className = "image border p-3 bounce-click ";
+    image.className = "image border p-3 bounce-click";
     image.loading = "lazy";
     image.id = "list_item_img";
     image.setAttribute("crossorigin", "anonymous");
@@ -87,40 +88,42 @@ async function displayPage(pageNumber, searchTerm, webps) {
     if (pngs_json_list?.includes(item.icon + ".png")) {
       imgSrc = `https://raw.githubusercontent.com/I-SHOW-AKIRU200/AKIRU-ICONS/main/ICONS/${item.icon}.png`;
     } else {
-      const keyToFind = item?.itemID ? String(item.itemID) : "Not Provided";
-      const value = cdn_img_json[item.itemID.toString()] ?? null;
+      const value = cdn_img_json[item.itemID?.toString()] ?? null;
       if (value) imgSrc = value;
     }
     image.src = imgSrc;
+
     if (item.description === "Didn't have an ID and description.") {
       image.style.background = "#607D8B";
     }
+
     image.addEventListener("click", () =>
       displayItemInfo(item, imgSrc, image, (isTrashMode = false)),
     );
-    
+
     fragment.appendChild(image);
   }
+
   webpGallery.appendChild(fragment);
-  let totalPages = Math.ceil(
-    filteredItems.length / itemID.config.perPageLimitItem,
-  );
-  renderPagination(searchTerm, webps, (isTrashMode = false), totalPages); // Render pagination
+
+  let totalPages = Math.ceil(filteredItems.length / itemID.config.perPageLimitItem);
+  renderPagination(searchTerm, webps, (isTrashMode = false), totalPages);
   updateUrl();
 }
 
 async function renderPagination(searchTerm, webps, isTrashMode, totalPages) {
   const paginationNumbers = await generatePaginationNumbers(totalPages);
   const pagi73hd = document.getElementById("pagi73hd");
+
   if (paginationNumbers.length === 0) {
     pagi73hd.style.visibility = "hidden";
     if (!notFoundText()) {
-      const notFoundText = document.createElement("h1");
-      notFoundText.id = "not_found_text";
-      notFoundText.className =
+      const notFoundElement = document.createElement("h1");
+      notFoundElement.id = "not_found_text";
+      notFoundElement.className =
         "transition-all duration-100 ease-in-out mt-[10vh] font-black select-none ibm-plex-mono-regular text-zinc-500 rotate-90 text-[1000%] w-[100vw] text-center whitespace-nowrap";
-      notFoundText.innerText = "NOT FOUND";
-      document.getElementById("container").appendChild(notFoundText);
+      notFoundElement.innerText = "NOT FOUND";
+      document.getElementById("container").appendChild(notFoundElement);
     }
   } else {
     pagi73hd.style.visibility = "visible";
